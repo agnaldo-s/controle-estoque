@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de estoque</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/assets/CSS/nav.css">  
+</head>
+<body>
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+            
+              <a class="navbar-brand" href="#">Lista de produtos</a>
+          
+            
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+          
+            
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="bi bi-house-door"></i> Início</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="bi bi-info-circle"></i> Produtos</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="bi bi-envelope"></i> Listar produtos</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+          <div>
+            
+            <ul class="lista-botoes">
+            <li><button type="button" class="btn btn-success btn-lg m-3">Adicionar</button></li>
+            <li><button type="button" class="btn btn-info btn-lg m-3">Editar</button></li> 
+            <li><button type="button" class="btn btn-danger btn-lg m-3">Desativar</button></li>
+            <li> <input type="text" placeholder="buscar" class="buscar"></li>
+            </ul>
+            
+    </div>
+        
+          <main class="container-fluid ">
+            <table class="table table-dark table table-bordered" >
+                <thead>
+                  <tr>
+                    <th class="col-1">Código</th>
+                    <th class="col-4">Nome</th>
+                    <th class="col-3">Último</th>
+                    <th class="col-1">Nickname</th>
+                    <th class="col-1">Nickname</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row-4 ">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                </tbody>
+              </table>
+          </main>
+          
+        
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+</body>
+</html>
