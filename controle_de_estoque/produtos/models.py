@@ -1,32 +1,33 @@
-from decimal import Decimal
-
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-from django.core.validators import MinValueValidator
+from django.utils import timezone
 
 # Create your models here.
 
-class Categoria(models.Model):
-    nome = models.CharField(max_length=80)
 
+class Tamanho(models.Model):
     class Meta:
-        db_table = "categoria"
+        db_table = "tb_tamanho"
 
-    def __str__(self):
-        return self.nome
+    nome = models.CharField(max_length=8)
 
 
 class Produto(models.Model):
-    nome = models.CharField(max_length=80, null=False)
-    tamanho = models.CharField(max_length=3, null=False)
-    preco_de_compra = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal("0.1"))])
-    ativo = models.BooleanField(default=True, null=False)
-
-    categoria = models.OneToOneField(Categoria, null=True, on_delete=models.SET_NULL);
-
     class Meta:
-        db_table = "produto"
+        db_table = "tb_produto"
 
-    def __str__(self):
-        return self.nome
+    nome = models.CharField(max_length=127, null=False)
+    descricao = models.TextField(null=False)
+    esta_ativo = models.BooleanField(default=True, null=False)
+    criado_em = models.DateTimeField(auto_now_add=True)
 
+    tamanhos = models.ManyToManyField(Tamanho, through="ProdutoTamanho")
+
+
+class ProdutoTamanho(models.Model):
+    class Meta:
+        db_table = "tb_produto_tamanho"
+
+    produto = models.ForeignKey(Produto, on_delete=models.SET_NULL, null=True)
+    tamanho = models.ForeignKey(Tamanho, on_delete=models.SET_NULL, null=True)
+    codigo_de_barras = models.CharField(max_length=127, null=True)
+    quantidade = models.PositiveIntegerField(null=False)
