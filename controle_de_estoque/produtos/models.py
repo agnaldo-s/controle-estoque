@@ -10,6 +10,9 @@ class Tamanho(models.Model):
 
     nome = models.CharField(max_length=8)
 
+    def __str__(self) -> str:
+        return self.nome
+
 
 class Produto(models.Model):
     class Meta:
@@ -22,6 +25,9 @@ class Produto(models.Model):
 
     tamanhos = models.ManyToManyField(Tamanho, through="ProdutoTamanho")
 
+    def __str__(self) -> str:
+        return self.nome
+
 
 class ProdutoTamanho(models.Model):
     class Meta:
@@ -31,3 +37,6 @@ class ProdutoTamanho(models.Model):
     tamanho = models.ForeignKey(Tamanho, on_delete=models.SET_NULL, null=True)
     codigo_de_barras = models.CharField(max_length=127, null=True)
     quantidade = models.PositiveIntegerField(null=False)
+
+    def __str__(self) -> str:
+        return f"{self.produto.nome} {self.tamanho.nome} {self.quantidade}"
