@@ -43,3 +43,12 @@ class ProdutoTamanhoTestCase(TestCase):
         self.assertNotEqual([produto.nome, produto.descricao], [produto_test.nome, produto_test.descricao])
         self.assertNotEqual(produto_tamanho.codigo_de_barras, produto_tamanho_test.codigo_de_barras)
         self.assertTrue(produto_test.tamanhos.all().count() > tamanhos_produto_antes_de_atualizar)
+    
+    @transaction.atomic
+    def test_desativar_produto_com_sucesso(self):
+        produto = Produto.objects.create(nome="Casaco Rosa", descricao="Um lindo casaco")
+        produto_test = Produto.objects.get(id=produto.id)
+        produto_test.esta_ativo = not produto_test.esta_ativo
+        produto_test.save()
+
+        self.assertNotEqual(produto.esta_ativo, produto_test.esta_ativo)
