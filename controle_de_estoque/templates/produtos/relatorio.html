@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include 'includes/links.html' %}
+  <link rel="stylesheet" href="{% static 'produtos/relatorio.css' %}">
+  {% include 'includes/scripts.html' %}
+  <title>Relatório</title>
+</head>
+<body>
+  {% include 'includes/header.html' %}
+  <div class="d-flex">
+    {% include 'includes/sidebar.html' with relatorio=True %}
+
+    <div class="w-100 ps-3" style="height: calc(100vh - 58px);">
+      <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div class="d-flex flex-column">
+          <h1 class="h4">Pesquisar</h1>
+          <form method="get">
+            <div class="input-group my-1">
+              <input name="nomeLike" type="text" class="form-control" placeholder="Nome do produto" aria-label="Recipient's username" aria-describedby="button-addon2">
+              <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="bi bi-search"></i></button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="myTable">
+        <div class="myTableScroll me-3 border border-secondary rounded border-opacity-50 overflow-auto" style="max-height: calc(100vh - 265px);">
+          <table class="table table-bordered table-hover table-striped table-sm overflow-y-scroll">
+            <thead class="sticky-top table-responsive">
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Ativo?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for produto in pagina %}
+                <tr class="myPointer">
+                  <td>{{produto.id}}</td>
+                  <td>{{produto.nome}}</td>
+                  <td>{{produto.descricao}}</td>
+                  {% if produto.esta_ativo %}
+                    <td>&#9989;</td>
+                  {% else %}
+                    <td>&#10060;</td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <nav class="pt-3" aria-label="Page navigation example">
+          {% with pagina_atual=pagina.number total_de_paginas=paginator.num_pages %}
+            <ul class="pagination">
+              {% if pagina_atual == 1 %}
+                <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="{% url 'produtos:relatorio' %}?nomeLike={{nome_like}}&page={{pagina.previous_page_number}}">Anterior</a></li>
+              {% endif %}
+
+              {% for pagina in elided %}
+                {% if pagina == pagina_atual %}
+                  <li class="page-item active"><span class="page-link">{{pagina}}</span></li>
+                {% elif pagina == paginator.ELLIPSIS %}
+                  <li class="page-item disabled"><span class="page-link">{{pagina}}</span></li>
+                {% else %}
+                  <li class="page-item"><a class="page-link" href="{% url 'produtos:relatorio' %}?nomeLike={{nome_like}}&page={{pagina}}">{{pagina}}</a></li>
+                {% endif %}
+              {% endfor %}
+
+              {% if pagina_atual == total_de_paginas %}
+                <li class="page-item disabled"><span class="page-link">Próximo</span></li>
+              {% else %}
+                  <li class="page-item"><a class="page-link" href="{% url 'produtos:relatorio' %}?nomeLike={{nome_like}}&page={{pagina.next_page_number}}">Próximo</a></li>
+              {% endif %}
+            </ul>
+          {% endwith %}
+        </nav>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
