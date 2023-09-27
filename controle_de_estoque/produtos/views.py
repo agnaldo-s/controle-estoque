@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from http import HTTPStatus
 
 from .models import Produto
 
@@ -23,3 +25,8 @@ def relatorio(request):
     pagina = paginator_produtos.get_page(numero_da_pagina)
 
     return render(request, "produtos/relatorio.html", context={"pagina": pagina, "paginator": paginator_produtos, "elided": paginator_elided, "nome_like": nome_like})
+
+
+def me(request):
+    print(request.POST)
+    return JsonResponse({}, status=HTTPStatus.CREATED)

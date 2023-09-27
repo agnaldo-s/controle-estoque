@@ -6,4 +6,5 @@ from . import views
 app_name = "produtos"
 urlpatterns = [
     path("", views.relatorio, name="relatorio"),
+    path("me/", views.me, name="me")
 ]
