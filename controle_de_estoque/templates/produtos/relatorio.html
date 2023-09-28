@@ -38,7 +38,7 @@
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Criar Produto</h1>
                     <button type="button" class="btn-close btn-close-form-criar-produto" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <form class="myFormCriarProduto" action="{% url 'produtos:me' %}" method="post">
+                  <form class="myFormCriarProduto">
                     {% csrf_token %}
                     <div class="modal-body">
                       <div class="mb-3">
@@ -58,9 +58,9 @@
                         <label for="tamanhosProduto" class="form-label">Tamanhos Disponíveis</label>
                         <select id="tamanhosProduto" class="form-select w-50" aria-label="Default select example">
                           <option selected>Selecione um tamanho:</option>
-                          <option value="P">P</option>
-                          <option value="GG">GG</option>
-                          <option value="XGG">XGG</option>
+                          {% for tamanho in tamanhos %}
+                            <option value="{{tamanho.nome}}">{{tamanho.nome}}</option>
+                          {% endfor %}
                         </select>
                       </div>
                       <div class="mb-3">
@@ -135,5 +135,6 @@
       </div>
     </div>
   </div>
+  <div id="myToast"></div>
 </body>
 </html>
