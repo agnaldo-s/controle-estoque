@@ -73,19 +73,68 @@ selectTamanhosProduto.addEventListener("change", () => {
   }
 });
 
-const getCookie = (cname) => {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
+const showToast = (title, text) => {
+  $("#myToast").html(`
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">${title}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">${text}</div>
+    </div>
+</div>
+  `);
+
+  const toastElement = document.querySelector("#liveToast");
+  const toast = bootstrap.Toast.getOrCreateInstance(toastElement);
+  toast.show();
 }
 
+$(document).on("submit", ".myFormCriarProduto", (e) => {
+  let tamanhosSelecionados = new Array();
+  let quantidadeTamanhoSelecionados = new Array();
+
+  $("input[name=valorTamanho]").each(function() {
+    tamanhosSelecionados.push($(this).val());
+  });
+  
+  $(".inputQuantidadeTamanho").each(function() {
+    quantidadeTamanhoSelecionados.push($(this).val());
+  });
+
+  const tamanhos = quantidadeTamanhoSelecionados.map((q, i) => ({
+    tamanho: tamanhosSelecionados[i],
+    quantidade: q
+  }));
+
+  e.preventDefault();
+  $.ajax({
+    type: "POST",
+    url: "me/",
+    data: { 
+      produto: JSON.stringify({
+        nome: $("#nomeProduto").val(),
+        descricao: $("#descricaoProduto").val(),
+        codigo_de_barras: $("#codigoDeBarrasProduto").val(),
+        tamanhos: tamanhos,
+    }),
+      csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+    },
+    success: function(data, textStatus, jqXHR) {
+      switch (jqXHR.status) {
+        case 201:
+          $(function () {
+            $("#modalCriarProduto").modal("toggle");
+          });
+    
+          $(".myFormCriarProduto")[0].reset();
+          $(".tamanhos-selecionados").html("");
+          $(".tamanhos-selecionados").removeClass("rounded");
+          $(".tamanhos-selecionados").removeClass("border");
+          showToast("Adicionar Produto", "Produto criado com sucesso!")
+          break;
+      }
+    },
+  });
+});
