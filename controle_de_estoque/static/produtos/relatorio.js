@@ -127,9 +127,13 @@ function popularTabela(pagina, nomeLike = "") {
           <li class="page-item disabled"><span class="page-link">${p}</span></li>
         `);
       } else {
-        myPagination.append(`
-          <li class="page-item ${p.toString() === data.paginaAtual ? "active" : ""}"><button onClick="popularTabela(${p})" type="button" class="page-link">${p}</button></li>
-        `);
+        if (p.toString() === data.paginaAtual) {
+          myPagination.append(`<li class="page-item active"><span class="page-link">${p}</span></li>`)
+        } else {
+          myPagination.append(`
+            <li class="page-item ${p.toString() === data.paginaAtual ? "active" : ""}"><button type="button" onClick="popularTabela(${p})" class="page-link">${p}</button></li>
+          `);
+        }
       }
     });
 
