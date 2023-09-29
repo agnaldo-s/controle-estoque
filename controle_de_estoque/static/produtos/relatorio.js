@@ -75,21 +75,98 @@ selectTamanhosProduto.addEventListener("change", () => {
 
 const showToast = (title, text) => {
   $("#myToast").html(`
-  <div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header">
-        <strong class="me-auto">${title}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">${title}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">${text}</div>
       </div>
-      <div class="toast-body">${text}</div>
     </div>
-</div>
   `);
 
   const toastElement = document.querySelector("#liveToast");
   const toast = bootstrap.Toast.getOrCreateInstance(toastElement);
   toast.show();
 }
+
+function popularTabela(pagina, nomeLike = "") {
+  $.get(`listar/?page=${pagina}&nomeLike=${nomeLike}`, function (data, status) {
+    const myPagination = $("#myPagination");
+    const myTableBody = $("#myTableBody");
+    myTableBody.html("");
+    myPagination.html("");
+
+    data.dadosPagina.forEach(produto => {
+      myTableBody.append(`
+        <tr class="myPointer">
+          <th>${produto.pk}</th>
+          <th>${produto.fields.nome}</th>
+          <th>${produto.fields.descricao}</th>
+          <th>${produto.fields.esta_ativo ? "&#9989;" : "&#10060;"}</th>
+      </tr>
+      `);
+    });
+
+    if (data.paginaAtual === "1") {
+      myPagination.append(`
+        <li class="page-item disabled" aria-current="page">
+          <span class="page-link">Anterior</span>
+        </li>
+      `)
+    } else {
+      myPagination.append(`
+        <li class="page-item"><button onClick="popularTabela(${data.paginaAnterior})" class="page-link">Anterior</button></li>
+      `)
+    }
+
+    data.paginaArray.forEach(p => {
+      if (p === "…") {
+        myPagination.append(`
+          <li class="page-item disabled"><span class="page-link">${p}</span></li>
+        `);
+      } else {
+        myPagination.append(`
+          <li class="page-item ${p.toString() === data.paginaAtual ? "active" : ""}"><button onClick="popularTabela(${p})" type="button" class="page-link">${p}</button></li>
+        `);
+      }
+    });
+
+    if (data.paginaAtual === data.totalPaginas) {
+      myPagination.append(`
+        <li class="page-item disabled" aria-current="page">
+          <span class="page-link">Próximo</span>
+        </li>
+      `)
+    } else {
+      myPagination.append(`
+        <li class="page-item"><button onClick="popularTabela(${data.proximaPagina})" class="page-link">Próximo</button></li>
+      `);
+    }
+  })
+}popularTabela(1);
+
+function popularSelectTamanhoProduto() {
+  $.get(`tamanhos/listar/`, function(data, status) {
+    const tamanhos = JSON.parse(data.dadosTamanho);
+    const tamanhosProduto = $("#tamanhosProduto");
+    tamanhosProduto.html("");
+
+    tamanhosProduto.append("<option selected>Selecione um tamanho:</option>")
+    tamanhos.forEach(tamanho => {
+      tamanhosProduto.append(`<option value=${tamanho.fields.nome}>${tamanho.fields.nome}</option>`);
+    });
+  })
+}popularSelectTamanhoProduto();
+
+$("#myFormPesquisarProdutoPeloNome").on("submit", function(e) {
+  e.preventDefault();
+  const nome = $("input[name=nomeLike]").val();
+
+  popularTabela(1, nome);
+})
+
 
 $(document).on("submit", ".myFormCriarProduto", (e) => {
   let tamanhosSelecionados = new Array();
@@ -111,7 +188,7 @@ $(document).on("submit", ".myFormCriarProduto", (e) => {
   e.preventDefault();
   $.ajax({
     type: "POST",
-    url: "me/",
+    url: "criar/",
     data: { 
       produto: JSON.stringify({
         nome: $("#nomeProduto").val(),
@@ -124,6 +201,8 @@ $(document).on("submit", ".myFormCriarProduto", (e) => {
     success: function(data, textStatus, jqXHR) {
       switch (jqXHR.status) {
         case 201:
+          tamanhosArr.length = 0;
+          tamanhosSelecionados.length = 0;
           $(function () {
             $("#modalCriarProduto").modal("toggle");
           });
@@ -133,6 +212,7 @@ $(document).on("submit", ".myFormCriarProduto", (e) => {
           $(".tamanhos-selecionados").removeClass("rounded");
           $(".tamanhos-selecionados").removeClass("border");
           showToast("Adicionar Produto", "Produto criado com sucesso!")
+          popularTabela(1);
           break;
       }
     },
