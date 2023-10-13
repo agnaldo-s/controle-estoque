@@ -73,3 +73,10 @@ def criar_produto(request):
                                         codigo_de_barras=produto_request["codigo_de_barras"])
 
     return JsonResponse({}, status=HTTPStatus.CREATED)
+
+from django.shortcuts import render, get_object_or_404
+from .models import Produto
+
+def obter_detalhes_produto(request, produto_id):
+    produto = get_object_or_404(Produto, pk=produto_id)
+    return render(request, 'detalhes_produto.html', {'produto': produto})
