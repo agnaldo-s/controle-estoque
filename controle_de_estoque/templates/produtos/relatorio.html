@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include 'includes/links.html' %}
+  <link rel="stylesheet" href="{% static 'produtos/relatorio.css' %}">
+  {% include 'includes/scripts.html' %}
+  <script defer src="{% static 'produtos/relatorio.js' %}"></script>
+  <title>Relatório</title>
+</head>
+<body>
+  {% include 'includes/header.html' %}
+  <div class="d-flex">
+    {% include 'includes/sidebar.html' with relatorio=True %}
+
+    <div class="w-100 ps-3 pe-3" style="height: calc(100vh - 58px);">
+      <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div class="d-flex flex-column w-100">
+          <h1 class="h4">Pesquisar</h1>
+          <div class="d-flex justify-content-between align-items-center">
+            <form id="myFormPesquisarProdutoPeloNome">
+              <div class="input-group my-1">
+                <input name="nomeLike" type="text" class="form-control" placeholder="Nome do produto" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="bi bi-search"></i></button>
+              </div>
+            </form>
+            <button type="button" class="btn d-flex align-items-center gap-2 btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCriarProduto">
+              <i class="bi bi-plus-circle"></i>
+              Adicionar Produto
+            </button>
+            <div class="modal fade" id="modalCriarProduto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Criar Produto</h1>
+                    <button type="button" class="btn-close btn-close-form-criar-produto" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <form class="myFormCriarProduto">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                      <div class="mb-3">
+                        <label for="nomeProduto" class="form-label">Nome do Produto</label>
+                        <input type="text" class="form-control" id="nomeProduto" name="nomeProduto" placeholder="Digite o nome do produto" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="descricaoProduto" class="form-label">Descrição do produto</label>
+                        <textarea class="form-control" name="descricaoProduto" id="descricaoProduto" rows="3" placeholder="Digite a descricao do produto" required></textarea>
+                      </div>
+                      <div class="mb-3 overflow-auto" style="max-height: 170px;">
+                        <ul class="tamanhos-selecionados pagination d-flex flex-wrap gap-2">
+
+                        </ul>
+                      </div>
+                      <div class="mb-3">
+                        <label for="tamanhosProduto" class="form-label">Tamanhos Disponíveis</label>
+                        <select id="tamanhosProduto" class="form-select w-50" aria-label="Default select example">
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label for="codigoDeBarrasProduto" class="form-label">Código de barras do produto</label>
+                        <input type="text" class="form-control" id="codigoDeBarrasProduto" name="codigoDeBarrasProduto" placeholder="Digite o codigo de barras do produto" required>
+                      </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-start">
+                      <button type="submit" id="btn-criar-produto" class="btn btn-success">Criar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="myTable">
+        <div class="myTableScroll border border-secondary rounded border-opacity-50 overflow-auto" style="max-height: calc(100vh - 265px);">
+          <table class="table table-bordered table-hover table-striped table-sm overflow-y-scroll">
+            <thead class="sticky-top table-responsive">
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Ativo?</th>
+              </tr>
+            </thead>
+            <tbody id="myTableBody">
+            </tbody>
+          </table>
+        </div>
+        <nav class="pt-3" aria-label="Page navigation example">
+            <ul id="myPagination" class="pagination">
+            </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <div id="myToast"></div>
+</body>
+</html>

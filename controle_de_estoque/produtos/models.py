@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 
 # Create your models here.
 
@@ -6,6 +7,7 @@ from django.db import models
 class Tamanho(models.Model):
     class Meta:
         db_table = "tb_tamanho"
+        ordering = [F("id").asc()]
 
     nome = models.CharField(max_length=8)
 
@@ -16,6 +18,7 @@ class Tamanho(models.Model):
 class Produto(models.Model):
     class Meta:
         db_table = "tb_produto"
+        ordering = [F("id").asc()]
 
     nome = models.CharField(max_length=127, null=False)
     descricao = models.TextField(null=False)
@@ -31,6 +34,7 @@ class Produto(models.Model):
 class ProdutoTamanho(models.Model):
     class Meta:
         db_table = "tb_produto_tamanho"
+        ordering = [F("id").asc()]
 
     produto = models.ForeignKey(Produto, on_delete=models.SET_NULL, null=True)
     tamanho = models.ForeignKey(Tamanho, on_delete=models.SET_NULL, null=True)
