@@ -9,7 +9,6 @@ const btnCloseFormCriarProduto = document.querySelector(".btn-close-form-criar-p
 const btnCriarProduto = document.querySelector("#btn-criar-produto");
 
 let tamanhosArr = new Array();
-let quantidadeTamanhoArr = new Array();
 
 const tamanhosSelecionados = document.querySelector(".tamanhos-selecionados");
 
@@ -35,7 +34,6 @@ selectTamanhosProduto.addEventListener("change", () => {
         <div class="input-group mb-1">
           <span class="input-group-text" id="basic-addon1">${selectTamanhosProduto.value}</span>
           <input type="hidden" name="valorTamanho" value="${selectTamanhosProduto.value}">
-          <input type="text" name="quantidadeTamanho" class="form-control inputQuantidadeTamanho" placeholder="Quantidade" aria-label="Username" aria-describedby="basic-addon1">
         </div>
         <button type="button" class="btn-close btn-remover-tamanho"></button>
       </li>
@@ -47,12 +45,6 @@ selectTamanhosProduto.addEventListener("change", () => {
       element.addEventListener("input", () => {
         element.setAttribute("value", element.value);
       });
-    });
-
-    quantidadeTamanhoArr.length = 0;
-
-    inputQuantidadeTamanho.forEach(element => {
-      quantidadeTamanhoArr.push(element.value);
     });
 
     const btnRemoverTamanho = document.querySelectorAll(".btn-remover-tamanho");
@@ -173,21 +165,16 @@ $("#myFormPesquisarProdutoPeloNome").on("submit", function(e) {
 
 
 $(document).on("submit", ".myFormCriarProduto", (e) => {
-  let tamanhosSelecionados = new Array();
-  let quantidadeTamanhoSelecionados = new Array();
 
-  $("input[name=valorTamanho]").each(function() {
-    tamanhosSelecionados.push($(this).val());
-  });
-  
-  $(".inputQuantidadeTamanho").each(function() {
-    quantidadeTamanhoSelecionados.push($(this).val());
-  });
-
-  const tamanhos = quantidadeTamanhoSelecionados.map((q, i) => ({
-    tamanho: tamanhosSelecionados[i],
-    quantidade: q
-  }));
+  console.log(
+    {
+      nome: $("#nomeProduto").val(),
+      descricao: $("#descricaoProduto").val(),
+      codigo_de_barras: $("#codigoDeBarrasProduto").val(),
+      tamanhos: tamanhosArr,
+      csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+    }
+  );
 
   e.preventDefault();
   $.ajax({
@@ -198,7 +185,7 @@ $(document).on("submit", ".myFormCriarProduto", (e) => {
         nome: $("#nomeProduto").val(),
         descricao: $("#descricaoProduto").val(),
         codigo_de_barras: $("#codigoDeBarrasProduto").val(),
-        tamanhos: tamanhos,
+        tamanhos: tamanhosArr,
     }),
       csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
     },

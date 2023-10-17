@@ -47,7 +47,7 @@ def listar_produtos(request):
             "dadosPagina": serializers.serialize("python", pagina)
         }
 
-        cache.set(cache_key, payload, 60)
+        cache.set(cache_key, payload, 1)
     else:
         payload = produtos_cacheados
 
@@ -64,12 +64,12 @@ def listar_tamanhos(request):
 @require_POST
 @transaction.atomic
 def criar_produto(request):
+    print(request.POST["produto"])
     produto_request = json.loads(request.POST["produto"])
     produto = Produto.objects.create(nome=produto_request["nome"], descricao=produto_request["descricao"])
 
     for tamanho_selecionado in produto_request["tamanhos"]:
-        tamanho = Tamanho.objects.get(nome=tamanho_selecionado["tamanho"])
-        ProdutoTamanho.objects.create(produto=produto, tamanho=tamanho, quantidade=tamanho_selecionado["quantidade"],
-                                        codigo_de_barras=produto_request["codigo_de_barras"])
+        tamanho = Tamanho.objects.get(nome=tamanho_selecionado)
+        ProdutoTamanho.objects.create(produto=produto, tamanho=tamanho, codigo_de_barras=produto_request["codigo_de_barras"])
 
     return JsonResponse({}, status=HTTPStatus.CREATED)
