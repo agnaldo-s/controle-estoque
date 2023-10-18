@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('codigo_de_barras', models.CharField(max_length=127, null=True)),
-                ('quantidade', models.PositiveIntegerField()),
+                ('quantidade', models.PositiveIntegerField(null=True)),
                 ('produto', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='produtos.produto')),
                 ('tamanho', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='produtos.tamanho')),
             ],

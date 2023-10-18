@@ -68,8 +68,7 @@ def criar_produto(request):
     produto = Produto.objects.create(nome=produto_request["nome"], descricao=produto_request["descricao"])
 
     for tamanho_selecionado in produto_request["tamanhos"]:
-        tamanho = Tamanho.objects.get(nome=tamanho_selecionado["tamanho"])
-        ProdutoTamanho.objects.create(produto=produto, tamanho=tamanho, quantidade=tamanho_selecionado["quantidade"],
-                                        codigo_de_barras=produto_request["codigo_de_barras"])
+        tamanho = Tamanho.objects.get(nome=tamanho_selecionado)
+        ProdutoTamanho.objects.create(produto=produto, tamanho=tamanho, codigo_de_barras=produto_request["codigo_de_barras"])
 
     return JsonResponse({}, status=HTTPStatus.CREATED)
