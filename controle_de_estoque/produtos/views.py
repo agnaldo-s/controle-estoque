@@ -47,7 +47,7 @@ def listar_produtos(request):
             "dadosPagina": serializers.serialize("python", pagina)
         }
 
-        cache.set(cache_key, payload, 1)
+        cache.set(cache_key, payload, 60)
     else:
         payload = produtos_cacheados
 
