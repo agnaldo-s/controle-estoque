@@ -39,7 +39,7 @@ class ProdutoTamanho(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.SET_NULL, null=True)
     tamanho = models.ForeignKey(Tamanho, on_delete=models.SET_NULL, null=True)
     codigo_de_barras = models.CharField(max_length=127, null=True)
-    quantidade = models.PositiveIntegerField(null=True)
+    quantidade = models.PositiveIntegerField(null=True, default=0)
 
     def __str__(self) -> str:
         return f"{self.produto.nome} {self.tamanho.nome} {self.quantidade}"
