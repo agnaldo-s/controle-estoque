@@ -64,7 +64,6 @@ def listar_tamanhos(request):
 @require_POST
 @transaction.atomic
 def criar_produto(request):
-    print(request.POST["produto"])
     produto_request = json.loads(request.POST["produto"])
     produto = Produto.objects.create(nome=produto_request["nome"], descricao=produto_request["descricao"])
 
