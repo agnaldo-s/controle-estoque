@@ -86,3 +86,5 @@ def desativar_produto(request, pk):
     produto.save()
 
     return JsonResponse({}, status=HTTPStatus.OK)
+
+

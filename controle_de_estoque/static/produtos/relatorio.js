@@ -235,10 +235,8 @@ const visualizar_produto = (pk) => {
   console.log(pk)
   $.ajax({
     type: "GET",
-    url: `desativar/${pk}`,
-    data: {
-      csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
-    },
+    url: `product_detail/${pk}`,
+    
     success: function(data, textStatus, jqXHR) {
       console.log(data);
       console.log(jqXHR.status);
