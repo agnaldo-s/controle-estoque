@@ -96,7 +96,14 @@ function popularTabela(pagina, nomeLike = "") {
           <th>${produto.pk}</th>
           <th>${produto.fields.nome}</th>
           <th>${produto.fields.descricao}</th>
-          <th>${produto.fields.esta_ativo ? "&#9989;" : "&#10060;"}</th>
+          <th class="w-25">${produto.fields.esta_ativo ? "&#9989;" : "&#10060;"}</th>
+
+          <th class="w-25">
+            <div class="btn-group" role="group" aria-label="Basic outlined example">
+              <button type="button" class="btn btn-warning">Editar</button>
+              <button onClick="desativarProduto(${produto.pk});" type="button" class="btn btn-danger">Desativar</button>
+            </div>
+          </th>
       </tr>
       `);
     });
@@ -209,3 +216,17 @@ $(document).on("submit", ".myFormCriarProduto", (e) => {
     },
   });
 });
+
+const desativarProduto = (pk) => {
+  $.ajax({
+    type: "POST",
+    url: `desativar/${pk}`,
+    data: {
+      csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+    },
+    success: function(data, textStatus, jqXHR) {
+      console.log(data);
+      console.log(jqXHR.status);
+    }
+  });
+}

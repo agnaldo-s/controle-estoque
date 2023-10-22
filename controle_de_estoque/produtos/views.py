@@ -47,7 +47,7 @@ def listar_produtos(request):
             "dadosPagina": serializers.serialize("python", pagina)
         }
 
-        cache.set(cache_key, payload, 60)
+        cache.set(cache_key, payload, 1)
     else:
         payload = produtos_cacheados
 
@@ -72,3 +72,17 @@ def criar_produto(request):
         ProdutoTamanho.objects.create(produto=produto, tamanho=tamanho, codigo_de_barras=produto_request["codigo_de_barras"])
 
     return JsonResponse({}, status=HTTPStatus.CREATED)
+
+
+@require_POST
+@transaction.atomic
+def desativar_produto(request, pk):
+    produto = Produto.objects.get(id=pk)
+
+    if not produto.esta_ativo:
+        return JsonResponse({"message": "O produto ja está inativo"}, status=HTTPStatus.BAD_REQUEST)
+
+    produto.esta_ativo = not produto.esta_ativo
+    produto.save()
+
+    return JsonResponse({}, status=HTTPStatus.OK)
