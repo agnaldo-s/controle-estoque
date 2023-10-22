@@ -233,6 +233,7 @@ const desativarProduto = (pk) => {
 
 const visualizar_produto = (pk) => {
   console.log(pk)
+  const bloco_costumisado = document.querySelector("#bloco-costumisado")
   $.ajax({
     type: "GET",
     url: `product_detail/${pk}`,
@@ -240,6 +241,11 @@ const visualizar_produto = (pk) => {
     success: function(data, textStatus, jqXHR) {
       console.log(data);
       console.log(jqXHR.status);
+      bloco_costumisado.innerHTML = `
+      <h1>teste</h1>
+      
+      
+      `
     }
   });
   
