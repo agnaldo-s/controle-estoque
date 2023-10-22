@@ -92,7 +92,7 @@ function popularTabela(pagina, nomeLike = "") {
 
     data.dadosPagina.forEach(produto => {
       myTableBody.append(`
-        <tr class="myPointer">
+        <tr class="myPointer" onClick="visualizar_produto(${produto.pk});">
           <th>${produto.pk}</th>
           <th>${produto.fields.nome}</th>
           <th>${produto.fields.descricao}</th>
@@ -229,4 +229,20 @@ const desativarProduto = (pk) => {
       console.log(jqXHR.status);
     }
   });
+}
+
+const visualizar_produto = (pk) => {
+  console.log(pk)
+  $.ajax({
+    type: "GET",
+    url: `desativar/${pk}`,
+    data: {
+      csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+    },
+    success: function(data, textStatus, jqXHR) {
+      console.log(data);
+      console.log(jqXHR.status);
+    }
+  });
+  
 }
