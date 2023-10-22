@@ -91,19 +91,37 @@ function popularTabela(pagina, nomeLike = "") {
     myPagination.html("");
 
     data.dadosPagina.forEach(produto => {
+      console.log(produto);
       myTableBody.append(`
         <tr class="myPointer">
-          <th>${produto.pk}</th>
-          <th>${produto.fields.nome}</th>
-          <th>${produto.fields.descricao}</th>
-          <th class="w-25">${produto.fields.esta_ativo ? "&#9989;" : "&#10060;"}</th>
+          <td>${produto.pk}</td>
+          <td>${produto.fields.nome}</td>
+          <td>${produto.fields.descricao}</td>
+          <td class="w-25">${produto.fields.esta_ativo ? "&#9989;" : "&#10060;"}</td>
 
-          <th class="w-25">
+          <td class="w-25">
             <div class="btn-group" role="group" aria-label="Basic outlined example">
               <button type="button" class="btn btn-warning">Editar</button>
-              <button onClick="desativarProduto(${produto.pk});" type="button" class="btn btn-danger">Desativar</button>
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDesativarProduto${produto.pk}">Desativar</button>
             </div>
-          </th>
+            <div class="modal fade" id="modalDesativarProduto${produto.pk}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDesativarProduto" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Desativar produto</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    Deseja desativar o produto "${produto.fields.nome}"?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button onClick="desativarProduto(${produto.pk});" type="button" class="btn btn-primary" data-bs-dismiss="modal">Desativar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
       </tr>
       `);
     });
@@ -224,9 +242,8 @@ const desativarProduto = (pk) => {
     data: {
       csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
     },
-    success: function(data, textStatus, jqXHR) {
-      console.log(data);
-      console.log(jqXHR.status);
-    }
+    complete: function(data) {
+      showToast("Desativar produto", data.responseJSON.message);
+    },
   });
 }

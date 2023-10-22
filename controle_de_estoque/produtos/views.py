@@ -85,4 +85,4 @@ def desativar_produto(request, pk):
     produto.esta_ativo = not produto.esta_ativo
     produto.save()
 
-    return JsonResponse({}, status=HTTPStatus.OK)
+    return JsonResponse({"message": "O produto foi desativado com sucesso!"}, status=HTTPStatus.OK)
