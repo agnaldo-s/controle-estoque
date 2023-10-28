@@ -91,9 +91,12 @@ def desativar_produto(request, pk):
 def product_detail(request, id):
     info_prod = Produto.objects.get(id=id)
     dicio_prod = {
+        "id" : info_prod.id,
         "nome" : info_prod.nome,
         "descricao" : info_prod.descricao,
         "esta_ativo" : info_prod.esta_ativo,
-        "criado_em" : info_prod.criado_em
+        "criado_em" : info_prod.criado_em,
+        # "codigo_de_barras" : info_prod.codigo_de_barras,
+
     }
     return JsonResponse({"produto": dicio_prod}, status=HTTPStatus.OK)

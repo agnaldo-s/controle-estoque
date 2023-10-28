@@ -42,4 +42,4 @@ class ProdutoTamanho(models.Model):
     quantidade = models.PositiveIntegerField(null=True, default=0)
 
     def __str__(self) -> str:
-        return f"{self.produto.nome} {self.tamanho.nome} {self.quantidade}"
+        return f"{self.produto.nome} {self.tamanho.nome} {self.quantidade} {self.codigo_de_barras}"

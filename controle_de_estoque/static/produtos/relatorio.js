@@ -232,21 +232,32 @@ const desativarProduto = (pk) => {
 }
 
 const visualizar_produto = (pk) => {
-  console.log(pk)
-  const bloco_costumisado = document.querySelector("#bloco-costumisado")
+  console.log(pk);
+  const bloco_costumisado = document.querySelector("#bloco-costumisado");
   $.ajax({
     type: "GET",
     url: `product_detail/${pk}`,
+    dataType: "json",
     
     success: function(data, textStatus, jqXHR) {
       console.log(data);
       console.log(jqXHR.status);
+     
+      const produto = data.produto; // Recupera o objeto de produto do JSON retornado
       bloco_costumisado.innerHTML = `
-      <h1>teste</h1>
-      
-      
-      `
+        <h4>ID: ${produto.id}</h4>
+        <h4>NOME: ${produto.nome}</h4>
+        <h4>DESCRIÇÃO: ${produto.descricao} </h4>
+        <h4>DISPONÍVEL: ${produto.esta_ativo} </h4>
+        <h4>DATA: ${produto.criado_em} </h4>
+        
+        
+       
+      `;
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.error("Erro na requisição AJAX:", errorThrown);
     }
   });
   
-}
+};
