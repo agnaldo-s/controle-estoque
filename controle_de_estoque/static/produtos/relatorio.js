@@ -247,3 +247,7 @@ const desativarProduto = (pk) => {
     },
   });
 }
+
+const editarProduto = () => {
+  console.log("vou editar");
+}
